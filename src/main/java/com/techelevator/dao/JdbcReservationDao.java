@@ -27,11 +27,15 @@ public class JdbcReservationDao implements ReservationDao {
     }
 
     @Override
-    public List<Reservation> getAllUpcomingReservations() {
+    public List<Reservation> getAllUpcomingReservations(int parkId) {
         List<Reservation> reservations = new ArrayList<>();
 
-        SqlRowSet results = jdbcTemplate.queryForRowSet("SELECT * FROM reservation " +
-                    "WHERE from_date >= CURRENT_DATE AND from_date < (CURRENT_DATE + 30);");
+        String sql = "SELECT * FROM reservation r "
+                + "JOIN site s USING (site_id) JOIN campground c ON (s.campground_id = c.campground_id) "
+                + "WHERE from_date >= CURRENT_DATE AND from_date < (CURRENT_DATE + 30) AND c.park_id = ? "
+                + "ORDER BY reservation_id DESC";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, parkId);
         while (results.next()) {
             reservations.add(mapRowToReservation(results));
         }
