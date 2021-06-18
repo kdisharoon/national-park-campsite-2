@@ -33,7 +33,7 @@ public class JdbcReservationDaoTests extends BaseDaoTests {
     @Test
     public void getAllUpcomingReservations_returns_reservations_in_next_30_days() {
         List<Reservation> expected = new ArrayList<>();
-        List<Reservation> actual = dao.getAllUpcomingReservations();
+        List<Reservation> actual = dao.getAllUpcomingReservations(99);
 
         Reservation r1 = new Reservation();
         r1.setReservationId(1237);
