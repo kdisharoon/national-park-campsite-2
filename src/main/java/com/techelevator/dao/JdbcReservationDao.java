@@ -26,9 +26,15 @@ public class JdbcReservationDao implements ReservationDao {
             return reservationId;
     }
 
+    @Override
     public List<Reservation> getAllUpcomingReservations() {
         List<Reservation> reservations = new ArrayList<>();
-        
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet("SELECT * FROM reservation " +
+                    "WHERE from_date >= CURRENT_DATE AND from_date < (CURRENT_DATE + 30);");
+        while (results.next()) {
+            reservations.add(mapRowToReservation(results));
+        }
 
         return reservations;
     }
