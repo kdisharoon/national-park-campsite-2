@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JdbcSiteDao implements SiteDao {
@@ -17,7 +18,19 @@ public class JdbcSiteDao implements SiteDao {
 
     @Override
     public List<Site> getSitesThatAllowRVs(int parkId) {
-        return null;
+        List<Site> sites = new ArrayList<>();
+
+        String sql = "SELECT * " +
+                "FROM site " +
+                "WHERE max_rv_length > 0;";
+
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+
+        while (results.next()) {
+            sites.add(mapRowToSite(results));
+        }
+
+        return sites;
     }
 
     private Site mapRowToSite(SqlRowSet results) {
