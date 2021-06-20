@@ -32,8 +32,9 @@ public class JdbcReservationDaoTests extends BaseDaoTests {
 
     @Test
     public void getAllUpcomingReservations_returns_reservations_in_next_30_days() {
+
+        //Arrange
         List<Reservation> expected = new ArrayList<>();
-        List<Reservation> actual = dao.getAllUpcomingReservations(99);
 
         Reservation r1 = new Reservation();
         r1.setReservationId(1237);
@@ -53,6 +54,10 @@ public class JdbcReservationDaoTests extends BaseDaoTests {
         r2.setCreateDate(LocalDate.now().minusDays(23));
         expected.add(r2);
 
+        //Act
+        List<Reservation> actual = dao.getAllUpcomingReservations(99);
+
+        //Assert
         Assert.assertEquals(expected.size(), actual.size());
         assertReservationsMatch(expected.get(0), actual.get(0));
         assertReservationsMatch(expected.get(1), actual.get(1));
